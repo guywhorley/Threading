@@ -22,6 +22,8 @@ namespace Basics
             // wait for worker
             t.Join();
 
+            // with the combination of waits and blocked threads, we should be 
+            // waiting for a total of 45 seconds.
             Console.WriteLine($"Worker thread {t.Name} has completed.");
             Console.WriteLine("Done with main thead.");
 
@@ -36,10 +38,13 @@ namespace Basics
 
         static void DoMyThing()
         {
+            // start a new thread to wait on
             Thread wait = new Thread(WaitLongTime);
             wait.Start();
+            // do not progress until wait thread has completed.
             wait.Join();
 
+            // now we can sleep for 30 seconds.
             Thread.Sleep(30000);
 
             var st = new StackTrace();
